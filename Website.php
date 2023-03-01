@@ -1,6 +1,6 @@
 <?php
 // Set API endpoint and version
-$api_url = 'https://api.demo.sitehost.co.nz/v1.0-public/';
+$api_url = 'https://api.demo.sitehost.co.nz/v1.2-public/';
 
 // Set API key and customer ID
 $api_key = 'd17261d51ff7046b760bd95b4ce781ac';
