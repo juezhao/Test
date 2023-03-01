@@ -1,38 +1,29 @@
 <?php
-// Set API endpoint and version
-$api_url = 'https://api.demo.sitehost.co.nz/v1/';
-
-// Set API key and customer ID
+// Set API details
+$api_server = 'https://api.demo.sitehost.co.nz';
+$api_version = '1.0';
 $api_key = 'd17261d51ff7046b760bd95b4ce781ac';
-$customer_id = 293785;
+$client_id = 293785;
+$format = 'json';
 
-// Build API request URL
-$request_url = $api_url . 'customers/' . $customer_id . '/domains';
+// Build API call URL
+$url = "{$api_server}/{$api_version}/srs/list_domains.{$format}?client_id={$client_id}&apikey={$api_key}";
 
-// Set headers for API request
-$headers = array(
-    'Authorization: Bearer ' . $api_key,
-    'Content-Type: application/json'
-);
+// Make API call
+$response = file_get_contents($url);
 
-// Make API request using cURL
-$curl = curl_init();
-curl_setopt_array($curl, array(
-    CURLOPT_URL => $request_url,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPHEADER => $headers
-));
-$response = curl_exec($curl);
-curl_close($curl);
+// Decode response into a PHP array
+$data = json_decode($response, true);
 
-// Parse API response
-$domains = json_decode($response, true);
-
-// Output domains on web page
-echo '<h1>List of domains for customer #' . $customer_id . '</h1>';
-echo '<ul>';
-foreach ($domains as $domain) {
-    echo '<li>' . $domain['name'] . '</li>';
+// Check if there was an error
+if ($data['status'] == 'error') {
+    echo "Error: {$data['message']}";
+} else {
+    // Display list of domains
+    echo "<ul>";
+    foreach ($data['domains'] as $domain) {
+        echo "<li>{$domain}</li>";
+    }
+    echo "</ul>";
 }
-echo '</ul>';
 ?>
